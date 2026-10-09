@@ -1,0 +1,134 @@
+/* ==========================================================
+   style.css : gaya dasar yang dipakai semua halaman
+   ========================================================== */
+
+:root {
+  /* Palet biru */
+  --blue-950: #06204a;
+  --blue-900: #0a2f6b;
+  --blue-800: #0d3f8f;
+  --blue-700: #1252b8;
+  --blue-600: #1a66d9;
+  --blue-500: #2f80ed;
+  --blue-400: #5a9cf5;
+  --blue-300: #8fbcf8;
+  --blue-200: #c3dcfc;
+  --blue-100: #e3effe;
+  --blue-50: #f3f8ff;
+
+  --white: #ffffff;
+  --ink: #0f1f3d;
+  --muted: #5b6b86;
+  --line: #d9e3f2;
+
+  --danger: #d93a3a;
+  --danger-bg: #fdecec;
+  --success: #17a673;
+
+  --radius: 14px;
+  --radius-lg: 22px;
+  --shadow-sm: 0 2px 8px rgba(13, 63, 143, 0.08);
+  --shadow-md: 0 12px 32px rgba(13, 63, 143, 0.16);
+  --shadow-lg: 0 24px 60px rgba(6, 32, 74, 0.28);
+
+  --font: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font);
+  color: var(--ink);
+  background: var(--blue-50);
+  line-height: 1.5;
+}
+
+/* Atribut hidden harus selalu menang */
+[hidden] {
+  display: none !important;
+}
+
+a {
+  color: var(--blue-600);
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+/* ---------- Tombol ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 13px 22px;
+  border: 0;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+.btn:focus-visible {
+  outline: 3px solid var(--blue-300);
+  outline-offset: 2px;
+}
+
+.btn-primary {
+  color: var(--white);
+  background: linear-gradient(135deg, var(--blue-500), var(--blue-700));
+  box-shadow: 0 8px 20px rgba(26, 102, 217, 0.35);
+}
+.btn-primary:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 26px rgba(26, 102, 217, 0.42);
+}
+.btn-primary:active:not(:disabled) {
+  transform: translateY(0);
+}
+.btn-primary:disabled {
+  cursor: not-allowed;
+  opacity: 0.85;
+}
+
+/* ---------- Spinner (indikator loading) ---------- */
+.spinner {
+  width: 18px;
+  height: 18px;
+  border: 3px solid rgba(255, 255, 255, 0.4);
+  border-top-color: var(--white);
+  border-radius: 50%;
+  animation: putar 0.7s linear infinite;
+}
+
+@keyframes putar {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Hormati pengguna yang mematikan animasi */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

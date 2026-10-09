@@ -1,0 +1,460 @@
+
+.page {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+}
+
+/* ===================== PANEL KIRI (HERO) ===================== */
+
+.hero {
+  position: relative;
+  overflow: hidden;
+  color: var(--white);
+  padding: 36px 52px;
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+  background:
+    radial-gradient(circle at 15% 10%, rgba(90, 156, 245, 0.45), transparent 45%),
+    radial-gradient(circle at 90% 85%, rgba(47, 128, 237, 0.4), transparent 50%),
+    linear-gradient(160deg, var(--blue-900) 0%, var(--blue-950) 100%);
+}
+
+/* Lingkaran dekoratif */
+.hero::before,
+.hero::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  pointer-events: none;
+}
+
+.hero::before {
+  width: 520px;
+  height: 520px;
+  right: -180px;
+  top: -160px;
+}
+
+.hero::after {
+  width: 380px;
+  height: 380px;
+  left: -140px;
+  bottom: -120px;
+}
+
+.hero > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* ---------- Brand + logo ---------- */
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.brand-logo {
+  width: 60px;
+  height: 60px;
+  flex-shrink: 0;
+  padding: 6px;
+  border-radius: 16px;
+  background: var(--white);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+.brand-logo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.brand-name {
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.brand-sub {
+  font-size: 0.8rem;
+  color: var(--blue-200);
+}
+
+/* ---------- Judul hero ---------- */
+
+.hero-text h1 {
+  margin: 0 0 12px;
+  font-size: clamp(2rem, 3vw, 2.7rem);
+  line-height: 1.15;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.hero-text h1 span {
+  color: var(--blue-300);
+}
+
+.hero-text p {
+  margin: 0;
+  max-width: 520px;
+  color: var(--blue-100);
+}
+
+/* ---------- Informasi poli yang tersedia ---------- */
+
+.mock-display {
+  max-width: 600px;
+  padding: 18px 20px;
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  box-shadow: var(--shadow-lg);
+}
+
+.mock-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: var(--blue-200);
+}
+
+.mock-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.mock-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 6px;
+  min-height: 100px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  font-size: 0.78rem;
+  line-height: 1.4;
+  color: var(--blue-100);
+}
+
+.mock-item b {
+  font-size: 0.95rem;
+  line-height: 1.35;
+  letter-spacing: 0;
+  color: var(--white);
+}
+
+/* ---------- Langkah-langkah ---------- */
+
+.steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  max-width: 600px;
+}
+
+.steps li {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px;
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.step-no {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  font-size: 0.85rem;
+  background: var(--white);
+  color: var(--blue-700);
+}
+
+.steps strong {
+  font-size: 0.95rem;
+}
+
+.steps span:last-child {
+  font-size: 0.8rem;
+  color: var(--blue-200);
+}
+
+/* ---------- Info bawah ---------- */
+
+.hero-foot {
+  margin-top: auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 28px;
+  font-size: 0.88rem;
+  color: var(--blue-200);
+}
+
+.hero-foot div::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin-right: 8px;
+  border-radius: 50%;
+  background: var(--blue-300);
+}
+
+/* ===================== PANEL KANAN (FORM) ===================== */
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+  padding: 40px 32px;
+  background:
+    radial-gradient(circle at 100% 0%, var(--blue-100), transparent 45%),
+    var(--blue-50);
+}
+
+.card {
+  width: 100%;
+  max-width: 420px;
+  padding: 34px;
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-md);
+  animation: muncul 0.5s ease both;
+}
+
+@keyframes muncul {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card h2 {
+  margin: 0 0 4px;
+  font-size: 1.6rem;
+  letter-spacing: -0.3px;
+}
+
+.card .lead {
+  margin: 0 0 22px;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+/* ---------- Kotak error ---------- */
+
+.alert {
+  margin-bottom: 18px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border-left: 4px solid var(--danger);
+  background: var(--danger-bg);
+  color: var(--danger);
+  font-size: 0.92rem;
+  animation: getar 0.4s ease;
+}
+
+@keyframes getar {
+  20% {
+    transform: translateX(-6px);
+  }
+
+  40% {
+    transform: translateX(6px);
+  }
+
+  60% {
+    transform: translateX(-4px);
+  }
+
+  80% {
+    transform: translateX(4px);
+  }
+}
+
+/* ---------- Field ---------- */
+
+.field {
+  margin-bottom: 18px;
+}
+
+.field label {
+  display: block;
+  margin-bottom: 7px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--blue-900);
+}
+
+.field input {
+  width: 100%;
+  padding: 13px 14px;
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  background: var(--blue-50);
+  color: var(--ink);
+  transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+}
+
+.field input::placeholder {
+  color: #93a3bd;
+}
+
+.field input:focus {
+  outline: none;
+  background: var(--white);
+  border-color: var(--blue-500);
+  box-shadow: 0 0 0 4px rgba(47, 128, 237, 0.16);
+}
+
+.field input:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.field.has-error input {
+  border-color: var(--danger);
+  box-shadow: 0 0 0 4px rgba(217, 58, 58, 0.1);
+}
+
+/* Tombol Lihat/Sembunyi di dalam input password */
+
+.input-wrap {
+  position: relative;
+}
+
+.input-wrap input {
+  padding-right: 80px;
+}
+
+.toggle-pass {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 6px 12px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--blue-700);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.toggle-pass:hover {
+  background: var(--blue-100);
+}
+
+.btn-login {
+  width: 100%;
+  margin-top: 6px;
+}
+
+/* ---------- Tautan publik ---------- */
+
+.public {
+  width: 100%;
+  max-width: 420px;
+  text-align: center;
+}
+
+.public p {
+  margin: 0 0 12px;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.public-links {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.public-link {
+  padding: 12px 10px;
+  border-radius: 12px;
+  background: var(--white);
+  border: 1px solid var(--line);
+  color: var(--blue-800);
+  font-weight: 600;
+  font-size: 0.9rem;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
+}
+
+.public-link:hover {
+  text-decoration: none;
+  transform: translateY(-2px);
+  border-color: var(--blue-400);
+  box-shadow: var(--shadow-md);
+}
+
+.copyright {
+  font-size: 0.78rem;
+  color: #8a9ab5;
+}
+
+/* ===================== RESPONSIF ===================== */
+
+@media (max-width: 1000px) {
+  .page {
+    grid-template-columns: 1fr;
+  }
+
+  .hero {
+    padding: 28px 24px;
+    gap: 20px;
+  }
+
+  .mock-display,
+  .steps {
+    display: none;
+  }
+
+  .panel {
+    padding: 32px 20px 40px;
+  }
+}
+
+@media (max-width: 480px) {
+  .card {
+    padding: 26px 20px;
+  }
+
+  .public-links {
+    grid-template-columns: 1fr;
+  }
+}
+

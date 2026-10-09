@@ -1,0 +1,158 @@
+
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Masuk | Sistem Antrian Rumah Sakit</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/login.css" />
+  </head>
+  <body>
+    <div class="page">
+      <!-- Panel Kiri: Informasi -->
+      <section class="hero" aria-label="Informasi layanan">
+        <div class="brand">
+          <div class="brand-logo">
+            <img src="image/logo-rs.png" alt="Logo RS Sehat Sentosa" />
+          </div>
+          <div>
+            <div class="brand-name">RS Sehat Sentosa</div>
+            <div class="brand-sub">Sistem Antrian Digital</div>
+          </div>
+        </div>
+
+        <div class="hero-text">
+          <h1>Antri lebih tertib,<br /><span>layanan lebih cepat.</span></h1>
+          <p>
+            Ambil nomor dari ponsel, pantau panggilan di layar, dan biarkan petugas melayani sesuai
+            urutan prioritas. Tanpa berdesakan, tanpa menunggu tanpa kepastian.
+          </p>
+        </div>
+
+        <!-- Informasi poli yang tersedia -->
+        <div class="mock-display" aria-label="Informasi poli yang tersedia">
+          <div class="mock-head">
+            <span>Poli yang Tersedia</span>
+          </div>
+
+          <div class="mock-list">
+            <div class="mock-item">
+              <b>Poli Anak</b>
+              <span>Melayani pemeriksaan kesehatan bayi dan anak.</span>
+            </div>
+
+            <div class="mock-item">
+              <b>Poli Gigi</b>
+              <span>Melayani pemeriksaan dan perawatan kesehatan gigi serta mulut.</span>
+            </div>
+
+            <div class="mock-item">
+              <b>Poli Penyakit Dalam</b>
+              <span>Melayani pemeriksaan dan penanganan penyakit pada organ dalam.</span>
+            </div>
+
+            <div class="mock-item">
+              <b>Poli Kebidanan dan Kandungan (Obgyn)</b>
+              <span>Melayani pemeriksaan kehamilan dan kesehatan reproduksi wanita.</span>
+            </div>
+
+            <div class="mock-item">
+              <b>Poli Kulit dan Kelamin</b>
+              <span>Melayani pemeriksaan masalah kesehatan kulit dan kelamin.</span>
+            </div>
+
+            <div class="mock-item">
+              <b>Poli Jantung</b>
+              <span>Melayani pemeriksaan dan penanganan kesehatan jantung.</span>
+            </div>
+          </div>
+        </div>
+
+        <ol class="steps">
+          <li>
+            <span class="step-no">1</span>
+            <strong>Ambil nomor</strong>
+            <span>Pilih layanan dan prioritas lewat ponsel.</span>
+          </li>
+          <li>
+            <span class="step-no">2</span>
+            <strong>Pantau layar</strong>
+            <span>Lihat nomor yang sedang dipanggil.</span>
+          </li>
+          <li>
+            <span class="step-no">3</span>
+            <strong>Dilayani</strong>
+            <span>Menuju loket saat nomormu dipanggil.</span>
+          </li>
+        </ol>
+
+        <div class="hero-foot">
+          <div>Pendaftaran 07.00 - 20.00 WIB</div>
+          <div>Prioritas untuk lansia, disabilitas, dan VIP</div>
+        </div>
+      </section>
+
+      <!-- Panel Kanan: Form Login -->
+      <main class="panel">
+        <div class="card">
+          <h2>Selamat datang</h2>
+          <p class="lead">Masuk sebagai admin atau operator.</p>
+
+          <!-- Pesan error (diisi oleh login.ts) -->
+          <div id="errorBox" class="alert" role="alert" hidden>
+            <span id="errorText">Pesan kesalahan</span>
+          </div>
+
+          <form id="loginForm" novalidate>
+            <div class="field" id="fieldUsername">
+              <label for="username">Username</label>
+              <input
+                type="text"
+                id="username"
+                name="username"
+                placeholder="Masukkan username"
+                autocomplete="username"
+                required
+              />
+            </div>
+
+            <div class="field" id="fieldPassword">
+              <label for="password">Password</label>
+              <div class="input-wrap">
+                <input
+                  type="password"
+                  id="password"
+                  name="password"
+                  placeholder="Masukkan password"
+                  autocomplete="current-password"
+                  required
+                />
+                <button type="button" id="togglePassword" class="toggle-pass">Lihat</button>
+              </div>
+            </div>
+
+            <button type="submit" id="btnLogin" class="btn btn-primary btn-login">
+              <span class="spinner" id="btnSpinner" hidden></span>
+              <span id="btnText">Masuk</span>
+            </button>
+          </form>
+        </div>
+
+        <!-- Halaman publik -->
+        <div class="public">
+          <p>Pengunjung? Tidak perlu login.</p>
+          <div class="public-links">
+            <a class="public-link" href="ambil-antrian.html">Ambil Antrian</a>
+            <a class="public-link" href="layar.html">Layar Antrian</a>
+          </div>
+        </div>
+
+        <div class="copyright">&copy; 2026 RS Sehat Sentosa. Seluruh hak dilindungi.</div>
+      </main>
+    </div>
+
+    <!-- Hasil kompilasi dari src/login.ts -->
+    <script type="module" src="dist/login.js" defer></script>
+  </body>
+</html>
