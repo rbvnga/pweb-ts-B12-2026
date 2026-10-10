@@ -1,14 +1,9 @@
 // login.ts : logika halaman login.html
 import { CredentialError, fetchProfile, loginRequest } from "./shared/api.js";
 import { homeFor, toRole } from "./shared/auth.js";
+import { byId } from "./shared/dom.js";
 import { getSession, saveSession } from "./shared/storage.js";
 // ---------- Ambil elemen HTML ----------
-function byId(id) {
-    const el = document.getElementById(id);
-    if (!el)
-        throw new Error(`Elemen #${id} tidak ditemukan di HTML`);
-    return el;
-}
 const form = byId("loginForm");
 const inputUser = byId("username");
 const inputPass = byId("password");

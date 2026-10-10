@@ -5,7 +5,7 @@
   grid-template-columns: 1.15fr 0.85fr;
 }
 
-/* ===================== PANEL KIRI (HERO) ===================== */
+/*  PANEL KIRI  */
 
 .hero {
   position: relative;
@@ -50,7 +50,7 @@
   z-index: 1;
 }
 
-/* ---------- Brand + logo ---------- */
+/*  Brand + logo  */
 
 .brand {
   display: flex;
@@ -89,7 +89,7 @@
   color: var(--blue-200);
 }
 
-/* ---------- Judul hero ---------- */
+/*  Judul hero */
 
 .hero-text h1 {
   margin: 0 0 12px;
@@ -109,7 +109,7 @@
   color: var(--blue-100);
 }
 
-/* ---------- Informasi poli yang tersedia ---------- */
+/*  Informasi poli yang tersedia*/
 
 .mock-display {
   max-width: 600px;
@@ -159,7 +159,7 @@
   color: var(--white);
 }
 
-/* ---------- Langkah-langkah ---------- */
+/*  Langkah-langkah  */
 
 .steps {
   list-style: none;
@@ -202,7 +202,7 @@
   color: var(--blue-200);
 }
 
-/* ---------- Info bawah ---------- */
+/* Info bawah */
 
 .hero-foot {
   margin-top: auto;
@@ -223,7 +223,7 @@
   background: var(--blue-300);
 }
 
-/* ===================== PANEL KANAN (FORM) ===================== */
+/*  PANEL KANAN (FORM)  */
 
 .panel {
   display: flex;
@@ -272,7 +272,7 @@
   font-size: 0.95rem;
 }
 
-/* ---------- Kotak error ---------- */
+/*  Kotak error  */
 
 .alert {
   margin-bottom: 18px;
@@ -303,7 +303,7 @@
   }
 }
 
-/* ---------- Field ---------- */
+/*  Field */
 
 .field {
   margin-bottom: 18px;
@@ -382,7 +382,7 @@
   margin-top: 6px;
 }
 
-/* ---------- Tautan publik ---------- */
+/* Tautan publik  */
 
 .public {
   width: 100%;
@@ -426,7 +426,7 @@
   color: #8a9ab5;
 }
 
-/* ===================== RESPONSIF ===================== */
+/*  RESPONSIF  */
 
 @media (max-width: 1000px) {
   .page {

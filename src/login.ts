@@ -1,16 +1,10 @@
-// login.ts : logika halaman login.html
 
 import { CredentialError, fetchProfile, loginRequest } from "./shared/api.js";
 import { homeFor, toRole } from "./shared/auth.js";
+import { byId } from "./shared/dom.js";
 import { getSession, saveSession } from "./shared/storage.js";
 
 // ---------- Ambil elemen HTML ----------
-function byId<T extends HTMLElement>(id: string): T {
-  const el = document.getElementById(id);
-  if (!el) throw new Error(`Elemen #${id} tidak ditemukan di HTML`);
-  return el as T;
-}
-
 const form = byId<HTMLFormElement>("loginForm");
 const inputUser = byId<HTMLInputElement>("username");
 const inputPass = byId<HTMLInputElement>("password");
@@ -104,7 +98,7 @@ form.addEventListener("submit", async (event) => {
       fieldPass.classList.add("has-error");
       showError(err.message);
     } else {
-      // fetch gagal total (internet mati, server tidak terjangkau, dll.)
+      // fetch gagal total 
       showError("Tidak dapat terhubung ke server. Periksa koneksi internet lalu coba lagi.");
     }
   }

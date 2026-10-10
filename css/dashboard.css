@@ -1,0 +1,370 @@
+/* NAVBAR */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 32px;
+  color: var(--white);
+  background: linear-gradient(135deg, var(--blue-900), var(--blue-950));
+  box-shadow: var(--shadow-md);
+}
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.nav-logo {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  padding: 5px;
+  border-radius: 12px;
+  background: var(--white);
+  display: grid;
+  place-items: center;
+}
+.nav-logo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.nav-title {
+  font-weight: 700;
+  line-height: 1.2;
+}
+.nav-sub {
+  font-size: 0.8rem;
+  color: var(--blue-200);
+}
+.nav-user {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.nav-user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.nav-name {
+  font-weight: 600;
+}
+
+/*  TOMBOL KECIL  */
+.btn-sm {
+  padding: 8px 14px;
+  border-radius: 9px;
+  font-size: 0.85rem;
+}
+.btn-light {
+  color: var(--white);
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.32);
+}
+.btn-light:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
+.btn-outline {
+  color: var(--ink);
+  background: var(--white);
+  border: 1px solid var(--line);
+}
+.btn-outline:hover {
+  background: var(--blue-50);
+  border-color: var(--blue-300);
+}
+.btn-danger {
+  color: var(--danger);
+  background: var(--white);
+  border: 1px solid #f1b8b8;
+}
+.btn-danger:hover {
+  background: var(--danger-bg);
+}
+
+/*   BADGE  */
+.badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+.badge-role {
+  text-transform: capitalize;
+  color: var(--white);
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(255, 255, 255, 0.32);
+}
+.badge-off {
+  color: var(--muted);
+  background: #eef1f6;
+  border-color: var(--line);
+}
+
+/* Prioritas */
+.prio-normal {
+  color: var(--muted);
+  background: #f1f4f9;
+  border-color: var(--line);
+}
+.prio-lansia {
+  color: #0f7a5a;
+  background: #e6f6f1;
+  border-color: #bfe8da;
+}
+.prio-disabilitas {
+  color: #5b3fc4;
+  background: #efeaff;
+  border-color: #d6cbfa;
+}
+.prio-vip {
+  color: #8a5a00;
+  background: #fff4d6;
+  border-color: #f3dc9a;
+}
+
+/* Status tiket */
+.status-menunggu {
+  color: var(--blue-700);
+  background: var(--blue-100);
+  border-color: var(--blue-200);
+}
+.status-dipanggil {
+  color: #12805a;
+  background: #dff5ea;
+  border-color: #b5e5cf;
+}
+.status-selesai {
+  color: var(--muted);
+  background: #f1f4f9;
+  border-color: var(--line);
+}
+.status-dilewati {
+  color: var(--danger);
+  background: var(--danger-bg);
+  border-color: #f5c2c2;
+}
+
+/*   TATA LETAK  */
+.container {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 28px 24px 48px;
+}
+.page-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.page-head h1 {
+  margin: 0 0 2px;
+  font-size: 1.6rem;
+  letter-spacing: -0.3px;
+}
+.page-head p {
+  margin: 0;
+  font-size: 0.92rem;
+  color: var(--muted);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: 20px;
+  align-items: start;
+}
+.box {
+  padding: 22px;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+.box h2 {
+  margin: 0 0 16px;
+  font-size: 1.1rem;
+}
+
+/*  PESAN AKSI   */
+.notice {
+  margin-bottom: 16px;
+  padding: 12px 16px;
+  border-left: 4px solid;
+  border-radius: 10px;
+  font-size: 0.92rem;
+}
+.notice-ok {
+  color: #0f6b4d;
+  background: #e6f6f1;
+  border-color: var(--success);
+}
+.notice-error {
+  color: var(--danger);
+  background: var(--danger-bg);
+  border-color: var(--danger);
+}
+
+/* FORM  */
+.form-row {
+  display: grid;
+  gap: 12px;
+  align-items: end;
+}
+.form-jenis {
+  grid-template-columns: 72px minmax(0, 1fr) auto;
+}
+.form-tiket {
+  grid-template-columns: minmax(0, 1fr) 150px auto;
+}
+.form-row label {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--blue-900);
+}
+.form-row .btn {
+  padding: 11px 18px;
+}
+
+.input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1.5px solid var(--line);
+  border-radius: 10px;
+  background: var(--blue-50);
+  color: var(--ink);
+  font: inherit;
+  transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+}
+.input::placeholder {
+  color: #93a3bd;
+}
+.input:focus {
+  outline: none;
+  background: var(--white);
+  border-color: var(--blue-500);
+  box-shadow: 0 0 0 4px rgba(47, 128, 237, 0.16);
+}
+.input-kode {
+  text-align: center;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.form-error {
+  margin: 10px 0 0;
+  font-size: 0.85rem;
+  color: var(--danger);
+}
+
+/* DAFTAR JENIS ANTRIAN  */
+.jenis-list {
+  margin: 18px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.jenis-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 0;
+  border-top: 1px solid var(--line);
+}
+.jenis-item.is-off .jenis-title strong {
+  color: var(--muted);
+}
+.jenis-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+}
+.jenis-kode {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+.jenis-info small {
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+.row-actions {
+  display: flex;
+  flex-shrink: 0;
+  gap: 8px;
+}
+
+/*  DAFTAR TIKET  */
+.tiket-group {
+  margin-top: 20px;
+}
+.tiket-group-title {
+  margin: 0 0 8px;
+  font-size: 0.78rem;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.tiket-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+  padding: 9px 12px;
+  border-radius: 10px;
+  background: var(--blue-50);
+}
+.tiket-label {
+  min-width: 66px;
+  font-size: 1rem;
+  letter-spacing: 0.5px;
+}
+.tiket-row .row-actions {
+  margin-left: auto;
+}
+.empty {
+  padding: 22px 0 6px;
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+/*  RESPONSIF  */
+@media (max-width: 900px) {
+  .navbar {
+    padding: 12px 18px;
+  }
+  .container {
+    padding: 22px 16px 40px;
+  }
+  .grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 560px) {
+  .nav-sub {
+    display: none;
+  }
+  .form-tiket {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+  .form-tiket .btn {
+    grid-column: 1 / -1;
+  }
+  .jenis-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

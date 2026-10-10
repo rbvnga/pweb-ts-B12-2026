@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Admin | Sistem Antrian Rumah Sakit</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/dashboard.css" />
+</head>
+<body>
+    <div id="app" hidden>
+      <!-- Navigation Bar -->
+      <header class="navbar">
+        <div class="nav-brand">
+          <div class="nav-logo">
+            <img src="image/logo-rs.png" alt="Logo RS Sehat Sentosa" />
+          </div>
+          <div>
+            <div class="nav-title">RS Sehat Sentosa</div>
+            <div class="nav-sub">Dashboard Admin</div>
+          </div>
+        </div>
+ 
+        <div class="nav-user">
+          <div class="nav-user-info">
+            <span id="navName" class="nav-name">-</span>
+            <span id="navRole" class="badge badge-role">-</span>
+          </div>
+          <button type="button" id="btnLogout" class="btn btn-sm btn-light">Logout</button>
+        </div>
+      </header>
+ 
+      <main class="container">
+        <div class="page-head">
+          <div>
+            <h1>Dashboard Admin</h1>
+          </div>
+          <button type="button" id="btnReset" class="btn btn-sm btn-danger">Reset Antrian</button>
+        </div>
+ 
+        <!-- Pesan hasil aksi (diisi oleh index.ts) -->
+        <div id="notice" class="notice" role="status" hidden></div>
+ 
+        <div class="grid">
+          <!-- Jenis Antrian -->
+          <section class="box" aria-labelledby="judulJenis">
+            <h2 id="judulJenis">Jenis antrian</h2>
+ 
+            <form id="formJenis" class="form-row form-jenis" novalidate>
+              <div>
+                <label for="inputKode">Kode</label>
+                <input
+                  type="text"
+                  id="inputKode"
+                  class="input input-kode"
+                  maxlength="1"
+                  placeholder="C"
+                  autocomplete="off"
+                />
+              </div>
+              <div>
+                <label for="inputNama">Nama layanan</label>
+                <input
+                  type="text"
+                  id="inputNama"
+                  class="input"
+                  placeholder="Contoh: Poli Kandungan"
+                  autocomplete="off"
+                />
+              </div>
+              <button type="submit" class="btn btn-primary">Tambah</button>
+            </form>
+            <p id="jenisError" class="form-error" role="alert" hidden></p>
+ 
+            <ul id="jenisList" class="jenis-list"></ul>
+          </section>
+ 
+          <!-- Terbitkan Tiket -->
+          <section class="box" aria-labelledby="judulTiket">
+            <h2 id="judulTiket">Terbitkan tiket</h2>
+ 
+            <form id="formTiket" class="form-row form-tiket" novalidate>
+              <div>
+                <label for="selectJenis">Jenis antrian</label>
+                <select id="selectJenis" class="input"></select>
+              </div>
+              <div>
+                <label for="selectPrioritas">Prioritas</label>
+                <select id="selectPrioritas" class="input"></select>
+              </div>
+              <button type="submit" class="btn btn-primary">Terbitkan</button>
+            </form>
+ 
+            <div id="tiketList"></div>
+          </section>
+        </div>
+      </main>
+    </div>
+ 
+    <!-- Hasil kompilasi dari src/index.ts -->
+    <script type="module" src="dist/index.js" defer></script>
+</body>
+</html>
