@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Layar Antrian</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/dashboard.css" />
+    <link rel="stylesheet" href="css/layar.css" />
+  </head>
+  <body>
+    <!-- Navbar -->
+    <header class="navbar">
+      <div class="nav-brand">
+        <div class="nav-logo">
+          <img src="image/logo-rs.png" alt="Logo RS Sehat Sentosa" />
+        </div>
+        <div>
+          <div class="nav-title">RS Sehat Sentosa</div>
+          <div class="nav-sub">Layar Antrian</div>
+        </div>
+      </div>
+
+      <nav class="nav-user" aria-label="Menu layar">
+        <a href="layar.html" class="btn btn-sm btn-light" aria-current="page"
+          >Layar Antrian</a
+        >
+        <a href="ambil-antrian.html" class="btn btn-sm btn-light"
+          >Ambil Nomor</a
+        >
+        <button type="button" id="btnFullscreen" class="btn btn-sm btn-light">
+          Layar Penuh
+        </button>
+      </nav>
+    </header>
+
+    <main class="container">
+      <!-- Judul dan jam -->
+      <div class="page-head">
+        <div>
+          <h1>Nomor sedang dipanggil</h1>
+          <p>Diperbarui <span id="waktuUpdate">--.--.--</span></p>
+        </div>
+      </div>
+
+      <!-- Wadah Kartu -->
+      <section aria-label="Daftar antrian">
+        <div id="daftarKartu" class="kartu-grid" aria-live="polite"></div>
+      </section>
+    </main>
+    <!-- Hasil Kompilasi src/layar.ts -->
+    <script type="module" src="dist/layar.js" defer></script>
+  </body>
+</html>

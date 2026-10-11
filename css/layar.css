@@ -1,0 +1,118 @@
+/* layar.css : style khusus halaman Layar Antrian */
+
+/* ---------- Grid kartu ---------- */
+.kartu-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px;
+}
+
+/* ---------- Kartu ---------- */
+.kartu {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 22px;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Hilangkan jarak bawaan browser pada judul & paragraf di dalam kartu */
+.kartu h2,
+.kartu p {
+  margin: 0;
+}
+
+/* Kepala: nama di kiri, kode di kanan */
+.kartu-kepala {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.kartu-nama {
+  font-size: 1.05rem;
+}
+.kartu-kode {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  font-weight: 700;
+  color: var(--blue-700);
+  background: var(--blue-100);
+}
+
+/* ---------- Label & nomor yang dipanggil ---------- */
+.kartu-status {
+  align-self: flex-start;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  color: #c2410c;
+  background: #fff1e6;
+}
+.kartu-nomor {
+  font-size: 3rem;
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: 1px;
+  color: var(--blue-900);
+}
+
+/* ---------- Saat belum ada yang dipanggil ---------- */
+.kartu-kosong {
+  font-weight: 600;
+  color: var(--muted);
+}
+.kartu-ket {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+/* ---------- Kaki kartu: jumlah menunggu ---------- */
+.kartu .kartu-menunggu {
+  margin-top: auto;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+/* ---------- Navbar ---------- */
+/* Link berbentuk tombol tidak perlu garis bawah saat disorot */
+.nav-user a.btn:hover {
+  text-decoration: none;
+}
+/* Tandai halaman yang sedang dibuka */
+.nav-user a[aria-current="page"] {
+  background: rgba(255, 255, 255, 0.24);
+}
+
+/* ---------- Saat layar penuh ---------- */
+/* Di TV, pakai seluruh lebar layar */
+:fullscreen .container {
+  max-width: none;
+  padding: 32px 48px;
+}
+
+/* ---------- Responsif (layar lebih kecil) ---------- */
+@media (max-width: 1024px) {
+  .kartu-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 560px) {
+  .kartu-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .nav-user {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+}
