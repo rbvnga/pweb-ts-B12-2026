@@ -1,4 +1,3 @@
-// login.ts : logika halaman login.html
 import { CredentialError, fetchProfile, loginRequest } from "./shared/api.js";
 import { homeFor, toRole } from "./shared/auth.js";
 import { byId } from "./shared/dom.js";
@@ -86,7 +85,7 @@ form.addEventListener("submit", async (event) => {
             showError(err.message);
         }
         else {
-            // fetch gagal total (internet mati, server tidak terjangkau, dll.)
+            // fetch gagal total 
             showError("Tidak dapat terhubung ke server. Periksa koneksi internet lalu coba lagi.");
         }
     }

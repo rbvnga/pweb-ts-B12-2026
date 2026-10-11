@@ -7,7 +7,6 @@ export function byId(id) {
     return element;
 }
 // Membuat elemen baru. Teks dipasang lewat textContent, jadi aman dari injeksi HTML
-// (penting karena nama layanan diketik sendiri oleh pengguna).
 export function el(tag, className = "", text = "") {
     const node = document.createElement(tag);
     if (className !== "")

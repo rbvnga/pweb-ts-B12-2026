@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Operator - RS Sehat Sentosa</title>
+    <link rel="stylesheet" href="css/operator.css">
+    <!-- Kompilasi TypeScript dihubungkan dengan atribut defer -->
+    <script src="dist/operator.js" defer></script>
+</head>
+<body>
+    <!-- App Container -->
+    <div class="app-layout">
+        
+        <!-- Header / Navbar dengan Tema Deep Blue & Logo Medis -->
+        <header class="app-header">
+            <div class="header-brand">
+                <div class="logo-box">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2v20M2 12h20"></path>
+                    </svg>
+                </div>
+                <div class="brand-text">
+                    <h1>RS Sehat Sentosa</h1>
+                    <span>Panel Kontrol Operator</span>
+                </div>
+            </div>
+            
+            <div class="header-nav-links">
+                <a href="layar.html" target="_blank" class="nav-link-badge">Layar Monitor</a>
+                <a href="ambil-antrian.html" target="_blank" class="nav-link-badge">Kiosk Pasien</a>
+            </div>
+
+            <div class="header-user-panel">
+                <div class="user-info">
+                    <div id="operatorAvatar" class="avatar-circle">OP</div>
+                    <div class="user-detail">
+                        <strong id="operatorName">Memuat...</strong>
+                        <small id="operatorRole">Operator Loket</small>
+                    </div>
+                </div>
+                <button id="logoutBtn" class="btn-logout" title="Keluar Sistem">Keluar</button>
+            </div>
+        </header>
+
+        <!-- Main Content Wrapper -->
+        <main class="main-content">
+            
+            <!-- Dashboard Top Action & Stats Bar -->
+            <section class="dashboard-controls-bar">
+                <div class="welcome-banner">
+                    <h2>Manajemen Pemanggilan Layanan</h2>
+                    <p>Kelola nomor antrian real-time berdasarkan tingkat prioritas pasien (VIP, Disabilitas, Lansia, Normal).</p>
+                </div>
+                
+                <div class="quick-stats-group">
+                    <div class="stat-pill">
+                        <span class="stat-label">Menunggu</span>
+                        <span id="totalWaitingCount" class="stat-number">0</span>
+                    </div>
+                    <div class="stat-pill">
+                        <span class="stat-label">Dilayani</span>
+                        <span id="totalActiveCount" class="stat-number">0</span>
+                    </div>
+                    <div class="stat-pill">
+                        <span class="stat-label">Waktu</span>
+                        <span id="systemClock" class="stat-number time-display">--:--</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Dynamic Queue Operator Cards Grid -->
+            <section class="queue-section">
+                <div class="section-title-wrapper">
+                    <h3>Daftar Loket & Jenis Layanan Aktif</h3>
+                    <span class="sync-indicator">Sinkronisasi Real-Time Aktif</span>
+                </div>
+
+                <div id="queueOperatorContainer" class="queue-grid">
+                    <!-- Kartu operator dirender secara dinamis via operator.ts -->
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer Info -->
+        <footer class="app-footer">
+            <p>&copy; 2026 RS Sehat Sentosa. Seluruh hak dilindungi.</p>
+        </footer>
+
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toastContainer" class="toast-container"></div>
+</body>
+</html>

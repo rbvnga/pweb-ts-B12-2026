@@ -7,7 +7,6 @@ export const KEYS = {
     tiket: "tiket",
     counter: "counter",
 };
-// ---------- Fungsi bantu ----------
 // Membaca JSON dari Local Storage. undefined = belum ada atau rusak.
 function readJSON(key) {
     const raw = localStorage.getItem(key);
@@ -26,7 +25,7 @@ function writeJSON(key, value) {
 function isObject(value) {
     return typeof value === "object" && value !== null;
 }
-// ==================== Sesi login ====================
+// Sesi login //
 const ROLES = ["admin", "moderator", "user"];
 export function saveSession(session) {
     writeJSON(KEYS.session, session);
@@ -48,7 +47,7 @@ export function getSession() {
 export function clearSession() {
     localStorage.removeItem(KEYS.session);
 }
-// ==================== Jenis antrian ====================
+//  Jenis antrian //
 // Isi awal supaya halaman Ambil Antrian tidak kosong saat pertama dibuka
 const DEFAULT_JENIS = [
     { id: "jenis-a", kode: "A", nama: "Poli Umum", aktif: true },
@@ -75,7 +74,7 @@ export function getJenisList() {
 export function saveJenisList(list) {
     writeJSON(KEYS.jenisAntrian, list);
 }
-// ==================== Tiket ====================
+// Tiket //
 function isTiket(value) {
     return (isObject(value) &&
         typeof value.id === "string" &&
@@ -94,7 +93,7 @@ export function getTiketList() {
 export function saveTiketList(list) {
     writeJSON(KEYS.tiket, list);
 }
-// ==================== Counter nomor tiket ====================
+//  Counter nomor tiket //
 export function getCounter() {
     const data = readJSON(KEYS.counter);
     const result = {};

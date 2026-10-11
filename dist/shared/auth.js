@@ -1,7 +1,7 @@
-// auth.ts : aturan hak akses dan perpindahan halaman berdasarkan role
+// auth.ts : Aturan role dan penjaga halaman
 import { clearSession, getSession } from "./storage.js";
-// Mengubah teks dari server menjadi Role yang valid.
-// Role yang tidak dikenal diperlakukan sebagai "user" (hak akses paling kecil).
+// Mengubah teks dari server menjadi Role yang valid
+// Role yang tidak dikenal diperlakukan sebagai "user" 
 export function toRole(value) {
     if (value === "admin" || value === "moderator" || value === "user") {
         return value;

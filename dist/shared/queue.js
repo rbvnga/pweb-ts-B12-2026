@@ -1,4 +1,4 @@
-// queue.ts : seluruh logika antrian (dipakai Dashboard, Operator, Ambil Antrian, Layar)
+// queue.ts : seluruh logika antrian 
 import { getCounter, getJenisList, getTiketList, saveCounter, saveJenisList, saveTiketList, } from "./storage.js";
 // ---------- Fungsi bantu ----------
 function ok(value) {
@@ -21,7 +21,7 @@ const PRIORITAS_RANK = {
     Lansia: 2,
     Normal: 3,
 };
-// ==================== Jenis antrian ====================
+// Jenis antrian //
 export function addJenis(kodeInput, namaInput) {
     const kode = kodeInput.trim().toUpperCase();
     const nama = namaInput.trim().replace(/\s+/g, " ");
@@ -69,7 +69,7 @@ export function resetAntrian() {
     saveTiketList([]);
     saveCounter({});
 }
-// ==================== Tiket ====================
+//  Tiket //
 export function createTicket(jenisId, prioritas) {
     const jenis = getJenisList().find((j) => j.id === jenisId);
     if (!jenis)
@@ -132,7 +132,7 @@ export function lewatiTiket(id) {
 export function selesaiTiket(id) {
     return setStatus(id, ["dipanggil"], "selesai");
 }
-// ==================== Pengurutan ====================
+//  Pengurutan //
 const STATUS_ORDER = {
     dipanggil: 0,
     menunggu: 1,

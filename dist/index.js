@@ -1,4 +1,3 @@
-// index.ts : logika Dashboard Admin (index.html)
 import { logout, requireAdmin } from "./shared/auth.js";
 import { byId, el } from "./shared/dom.js";
 import { addJenis, createTicket, deleteJenis, lewatiTiket, panggilTiket, resetAntrian, selesaiTiket, sortForDisplay, toggleJenis, } from "./shared/queue.js";
