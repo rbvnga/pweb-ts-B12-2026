@@ -1,49 +1,45 @@
-// layar.ts : Layar antrian publik (tanpa login)
+// Halaman layar antrian (publik, ga perlu login)
+
 import { byId, el } from "./shared/dom.js";
 import { getJenisList, getTiketList } from "./shared/storage.js";
 import type { JenisAntrian, Tiket } from "./shared/types.js";
+
 // ---------- Ambil elemen HTML ----------
 const btnFullscreen = byId<HTMLButtonElement>("btnFullscreen");
 const waktuUpdate = byId<HTMLSpanElement>("waktuUpdate");
 const daftarKartu = byId<HTMLDivElement>("daftarKartu");
 
-// Jeda polling dalam milidetik (2500 ms = 2,5 detik, sesuai soal: 2–3 detik)
+// cek data tiap 2,5 detik (soal minta polling 2-3 detik)
 const INTERVAL_POLLING = 2500;
 
 // ==================== TAMPILAN ====================
-// Membuat SATU kartu untuk SATU jenis antrian
+
+// bikin 1 kartu buat 1 jenis antrian
 function buatKartu(jenis: JenisAntrian, semuaTiket: Tiket[]): HTMLElement {
-  // 1. Ambil tiket milik jenis ini saja
-  const milikJenis = semuaTiket.filter((t) => t.jenisId === jenis.id);
+  // ambil tiket yang punya jenis ini aja
+  const tiketJenisIni = semuaTiket.filter((t) => t.jenisId === jenis.id);
 
-  // 2. Cari tiket yang sedang dipanggil
-  const dipanggil = milikJenis.find((t) => t.status === "dipanggil");
+  // yang dipanggil cuma ada 1 per jenis (aturan di queue.ts), jadi pakai find
+  const dipanggil = tiketJenisIni.find((t) => t.status === "dipanggil");
 
-  // 3. Hitung tiket yang masih menunggu
-  const jumlahMenunggu = milikJenis.filter(
-    (t) => t.status === "menunggu",
-  ).length;
+  const tiketMenunggu = tiketJenisIni.filter((t) => t.status === "menunggu");
+  const jumlahMenunggu = tiketMenunggu.length;
 
-  // ----- Rakit kartunya -----
   const kartu = el("article", "kartu");
 
-  // Kepala: nama layanan + badge kode
+  // bagian atas: nama poli + kode
   const kepala = el("div", "kartu-kepala");
-  kepala.append(
-    el("h2", "kartu-nama", jenis.nama),
-    el("span", "kartu-kode", jenis.kode),
-  );
+  kepala.append(el("h2", "kartu-nama", jenis.nama));
+  kepala.append(el("span", "kartu-kode", jenis.kode));
   kartu.append(kepala);
 
-  // Tengah: nomor yang dipanggil, atau pesan kosong
+  // bagian tengah: nomor yang dipanggil, atau pesan kalau belum ada
   if (dipanggil) {
-    kartu.append(
-      el("span", "kartu-status", "● DIPANGGIL"),
-      el("p", "kartu-nomor", dipanggil.label),
-    );
+    kartu.append(el("span", "kartu-status", "● DIPANGGIL"));
+    kartu.append(el("p", "kartu-nomor", dipanggil.label));
   } else {
+    kartu.append(el("p", "kartu-kosong", "Belum ada nomor dipanggil"));
     kartu.append(
-      el("p", "kartu-kosong", "Belum ada nomor dipanggil"),
       el(
         "small",
         "kartu-ket",
@@ -52,39 +48,40 @@ function buatKartu(jenis: JenisAntrian, semuaTiket: Tiket[]): HTMLElement {
     );
   }
 
-  // Kaki: jumlah yang menunggu
+  // bagian bawah: berapa yang masih nunggu
   kartu.append(el("p", "kartu-menunggu", `${jumlahMenunggu} tiket menunggu`));
 
   return kartu;
 }
 
 function render(): void {
-  // Ambil data dari Local Storage
-  const semuaJenis = getJenisList();
-  const jenisAktif = semuaJenis.filter((j) => j.aktif);
+  // jenis yang dinonaktifkan admin ga ditampilin
+  const jenisAktif = getJenisList().filter((j) => j.aktif);
+
+  // dibaca sekali aja di sini, terus dibagi ke semua kartu
   const semuaTiket = getTiketList();
 
-  // Kosongkan wadah dulu
+  // hapus kartu lama dulu, kalau nggak kartunya numpuk tiap polling
   daftarKartu.replaceChildren();
 
-  // Kalau tidak ada layanan aktif, tampilkan pesan
   if (jenisAktif.length === 0) {
     daftarKartu.append(el("p", "empty", "Belum ada layanan yang aktif."));
     return;
   }
 
-  // Buat satu kartu untuk setiap jenis aktif
-  for (const j of jenisAktif) {
-    daftarKartu.append(buatKartu(j, semuaTiket));
+  for (const jenis of jenisAktif) {
+    const kartu = buatKartu(jenis, semuaTiket);
+    daftarKartu.append(kartu);
   }
 }
 
-// Tulis jam saat ini ke teks "Diperbarui ..."
+// ini waktu terakhir data dicek, bukan jam biasa
+// makanya cuma berubah tiap polling, ga tiap detik
 function updateJam(): void {
   waktuUpdate.textContent = new Date().toLocaleTimeString("id-ID");
 }
 
-// Satu kali "putaran": gambar ulang kartu, lalu perbarui jam
+// dipanggil tiap polling: gambar ulang kartu + update jam
 function perbarui(): void {
   render();
   updateJam();
@@ -92,23 +89,25 @@ function perbarui(): void {
 
 // ==================== LAYAR PENUH ====================
 
-// Klik tombol: masuk layar penuh kalau belum, keluar kalau sudah
 btnFullscreen.addEventListener("click", () => {
+  // fullscreenElement isinya null kalau lagi ga fullscreen
   if (document.fullscreenElement) {
     document.exitFullscreen();
   } else {
-    document.documentElement.requestFullscreen();
+    document.documentElement.requestFullscreen(); // documentElement = seluruh halaman
   }
 });
 
-// Teks tombol selalu mengikuti keadaan (termasuk saat keluar lewat tombol Esc)
+// teks tombol diganti di sini, bukan di click
+// soalnya keluar fullscreen bisa juga lewat tombol Esc, bukan cuma klik tombol
 document.addEventListener("fullscreenchange", () => {
-  btnFullscreen.textContent = document.fullscreenElement
-    ? "Keluar Layar Penuh"
-    : "Layar Penuh";
+  if (document.fullscreenElement) {
+    btnFullscreen.textContent = "Keluar Layar Penuh";
+  } else {
+    btnFullscreen.textContent = "Layar Penuh";
+  }
 });
 
 // ==================== MULAI ====================
-
-perbarui(); // 1. tampilkan langsung saat halaman dibuka
-setInterval(perbarui, INTERVAL_POLLING); // 2. lalu ulangi setiap 2,5 detik
+perbarui(); // langsung tampil, ga nunggu 2,5 detik pertama
+setInterval(perbarui, INTERVAL_POLLING); // tanpa () karena yang dikasih fungsinya, bukan hasilnya

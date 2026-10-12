@@ -1,0 +1,74 @@
+/* Halaman ambil antrian */
+
+/* form-nya ga perlu selebar dashboard, biar enak dilihat di HP/kios */
+.container {
+  max-width: 640px;
+}
+
+/* jarak antara kotak form dan kotak tiket */
+.box + .box {
+  margin-top: 20px;
+}
+
+/* ---------- Form ---------- */
+.form-ambil {
+  display: grid;
+  gap: 16px;
+}
+.field label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--blue-900);
+}
+.form-ambil .btn {
+  width: 100%;
+  margin-top: 4px;
+}
+
+/* ---------- Tiket ---------- */
+.tiket {
+  text-align: center;
+  border: 2px dashed var(--blue-300);
+}
+.tiket p {
+  margin: 0;
+}
+.tiket-judul {
+  font-size: 0.8rem;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.tiket .tiket-nomor {
+  margin: 8px 0;
+  font-size: 3.5rem;
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: 1px;
+  color: var(--blue-900);
+}
+.tiket-layanan {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+.tiket-info {
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+.tiket .tiket-catatan {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+/* ---------- Navbar (sama kayak di layar) ---------- */
+.nav-user a.btn:hover {
+  text-decoration: none;
+}
+.nav-user a[aria-current="page"] {
+  background: rgba(255, 255, 255, 0.24);
+}

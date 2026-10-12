@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ambil Antrian | Sistem Antrian Rumah Sakit</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/dashboard.css" />
+    <link rel="stylesheet" href="css/ambil-antrian.css" />
+  </head>
+  <body>
+    <!-- Navbar -->
+    <header class="navbar">
+      <div class="nav-brand">
+        <div class="nav-logo">
+          <img src="image/logo-rs.png" alt="Logo RS Sehat Sentosa" />
+        </div>
+        <div>
+          <div class="nav-title">RS Sehat Sentosa</div>
+          <div class="nav-sub">Ambil Antrian</div>
+        </div>
+      </div>
+
+      <nav class="nav-user" aria-label="Menu pengunjung">
+        <a href="layar.html" class="btn btn-sm btn-light">Layar Antrian</a>
+        <a
+          href="ambil-antrian.html"
+          class="btn btn-sm btn-light"
+          aria-current="page"
+          >Ambil Nomor</a
+        >
+      </nav>
+    </header>
+
+    <main class="container">
+      <!-- Judul -->
+      <div class="page-head">
+        <div>
+          <h1>Ambil Nomor Antrian</h1>
+          <p>Pilih layanan dan prioritas, lalu tekan Ambil Nomor.</p>
+        </div>
+      </div>
+
+      <!-- Formulir (poin 1) -->
+      <section class="box" aria-labelledby="judulForm">
+        <h2 id="judulForm">Pilih layanan</h2>
+
+        <form id="formAmbil" class="form-ambil" novalidate>
+          <div class="field">
+            <label for="selectJenis">Jenis antrian</label>
+            <select id="selectJenis" class="input"></select>
+          </div>
+          <div class="field">
+            <label for="selectPrioritas">Prioritas</label>
+            <select id="selectPrioritas" class="input"></select>
+          </div>
+          <button type="submit" class="btn btn-primary">Ambil Nomor</button>
+        </form>
+
+        <p id="pesanError" class="form-error" role="alert" hidden></p>
+      </section>
+
+      <!-- Tiket hasil (poin 2), diisi oleh ambil-antrian.ts -->
+      <section
+        id="hasilTiket"
+        class="box tiket"
+        aria-live="polite"
+        hidden
+      ></section>
+    </main>
+
+    <!-- Hasil kompilasi dari src/ambil-antrian.ts -->
+    <script type="module" src="dist/ambil-antrian.js" defer></script>
+  </body>
+</html>
