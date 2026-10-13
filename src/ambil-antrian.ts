@@ -1,8 +1,7 @@
 // Halaman ambil antrian (publik, ga perlu login)
-
 import { byId, el } from "./shared/dom.js";
 import { createTicket } from "./shared/queue.js";
-import { getJenisList } from "./shared/storage.js";
+import { getJenisList, getSession } from "./shared/storage.js";
 import { PRIORITAS_LIST } from "./shared/types.js";
 import type { Tiket } from "./shared/types.js";
 
@@ -112,6 +111,11 @@ formAmbil.addEventListener("submit", (event) => {
 });
 
 // ==================== MULAI ====================
-isiPilihanPrioritas();
-isiPilihanJenis();
-setInterval(isiPilihanJenis, INTERVAL_POLLING); // biar jenis baru dari admin muncul sendiri
+// ambil antrian sekarang wajib login
+if (getSession() === null) {
+  window.location.replace("login.html");
+} else {
+  isiPilihanPrioritas();
+  isiPilihanJenis();
+  setInterval(isiPilihanJenis, INTERVAL_POLLING); // biar jenis baru dari admin muncul sendiri
+}

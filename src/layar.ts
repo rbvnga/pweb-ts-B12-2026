@@ -1,7 +1,7 @@
 // Halaman layar antrian (publik, ga perlu login)
 
 import { byId, el } from "./shared/dom.js";
-import { getJenisList, getTiketList } from "./shared/storage.js";
+import { getJenisList, getSession, getTiketList } from "./shared/storage.js";
 import type { JenisAntrian, Tiket } from "./shared/types.js";
 
 // ---------- Ambil elemen HTML ----------
@@ -109,5 +109,10 @@ document.addEventListener("fullscreenchange", () => {
 });
 
 // ==================== MULAI ====================
-perbarui(); // langsung tampil, ga nunggu 2,5 detik pertama
-setInterval(perbarui, INTERVAL_POLLING); // tanpa () karena yang dikasih fungsinya, bukan hasilnya
+//  layar sekarang wajib login
+if (getSession() === null) {
+  window.location.replace("login.html");
+} else {
+  perbarui(); // langsung tampil, ga nunggu 2,5 detik pertama
+  setInterval(perbarui, INTERVAL_POLLING);
+}

@@ -1,7 +1,7 @@
 // Halaman ambil antrian (publik, ga perlu login)
 import { byId, el } from "./shared/dom.js";
 import { createTicket } from "./shared/queue.js";
-import { getJenisList } from "./shared/storage.js";
+import { getJenisList, getSession } from "./shared/storage.js";
 import { PRIORITAS_LIST } from "./shared/types.js";
 // ---------- Ambil elemen HTML ----------
 const formAmbil = byId("formAmbil");
@@ -82,7 +82,13 @@ formAmbil.addEventListener("submit", (event) => {
     formAmbil.reset(); // kosongin form buat pengunjung berikutnya
 });
 // ==================== MULAI ====================
-isiPilihanPrioritas();
-isiPilihanJenis();
-setInterval(isiPilihanJenis, INTERVAL_POLLING); // biar jenis baru dari admin muncul sendiri
+// ambil antrian sekarang wajib login
+if (getSession() === null) {
+    window.location.replace("login.html");
+}
+else {
+    isiPilihanPrioritas();
+    isiPilihanJenis();
+    setInterval(isiPilihanJenis, INTERVAL_POLLING); // biar jenis baru dari admin muncul sendiri
+}
 //# sourceMappingURL=ambil-antrian.js.map
