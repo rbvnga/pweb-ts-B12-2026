@@ -3,22 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+        if (!localStorage.getItem('session')) { location.replace('login.html'); }
+    </script>
     <title>Panel Operator - RS Sehat Sentosa</title>
     <link rel="stylesheet" href="css/operator.css">
-    <!-- Kompilasi TypeScript dihubungkan dengan atribut defer -->
-    <script src="dist/operator.js" defer></script>
+    <script type="module" src="dist/operator.js"></script>
 </head>
 <body>
     <!-- App Container -->
     <div class="app-layout">
         
-        <!-- Header / Navbar dengan Tema Deep Blue & Logo Medis -->
+        <!-- Header / Navbar -->
         <header class="app-header">
             <div class="header-brand">
                 <div class="logo-box">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M12 2v20M2 12h20"></path>
-                    </svg>
+                    <!-- Menggunakan tag gambar sesuai struktur folder image/ -->
+                    <img src="image/logo-rs.png" alt="Logo RS Sehat Sentosa" class="brand-logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                 </div>
                 <div class="brand-text">
                     <h1>RS Sehat Sentosa</h1>
@@ -28,7 +29,7 @@
             
             <div class="header-nav-links">
                 <a href="layar.html" target="_blank" class="nav-link-badge">Layar Monitor</a>
-                <a href="ambil-antrian.html" target="_blank" class="nav-link-badge">Kiosk Pasien</a>
+                <a href="ambil-antrian.html" target="_blank" class="nav-link-badge">Ambil Antrian</a>
             </div>
 
             <div class="header-user-panel">
@@ -39,7 +40,7 @@
                         <small id="operatorRole">Operator Loket</small>
                     </div>
                 </div>
-                <button id="logoutBtn" class="btn-logout" title="Keluar Sistem">Keluar</button>
+                <button id="logoutBtn" class="btn-logout" type="button">Keluar</button>
             </div>
         </header>
 

@@ -1,302 +1,261 @@
-interface QueueType {
-    code: string;
-    name: string;
-    active: boolean;
+// Halaman operator (perlu login). Memakai modul di shared/, sama seperti admin.ts.
+
+import { logout } from "./shared/auth.js";
+import { byId, el } from "./shared/dom.js";
+import { lewatiTiket, panggilTiket, selesaiTiket } from "./shared/queue.js";
+import { getJenisList, getSession, getTiketList, KEYS } from "./shared/storage.js";
+import type { JenisAntrian, Session, Tiket } from "./shared/types.js";
+
+const LOGIN_PAGE = "login.html";
+const INTERVAL_POLLING = 2000;
+
+// ---------- Ambil elemen HTML ----------
+const operatorAvatar = byId<HTMLElement>("operatorAvatar");
+const operatorName = byId<HTMLElement>("operatorName");
+const operatorRole = byId<HTMLElement>("operatorRole");
+const btnLogout = byId<HTMLButtonElement>("logoutBtn");
+const totalWaitingCount = byId<HTMLElement>("totalWaitingCount");
+const totalActiveCount = byId<HTMLElement>("totalActiveCount");
+const systemClock = byId<HTMLElement>("systemClock");
+const container = byId<HTMLElement>("queueOperatorContainer");
+const toastContainer = byId<HTMLElement>("toastContainer");
+
+// ==================== AUTH GUARD ====================
+
+// Belum login -> paksa kembali ke login.html
+function pastikanLogin(): Session | null {
+  const session = getSession();
+  if (!session) {
+    window.location.replace(LOGIN_PAGE);
+    return null;
+  }
+  return session;
 }
 
-interface Ticket {
-    id: string; // Contoh: "A-001"
-    queueCode: string; // Contoh: "A"
-    number: number;
-    priority: 'Normal' | 'Lansia' | 'Disabilitas' | 'VIP';
-    status: 'Menunggu' | 'Dipanggil' | 'Selesai' | 'Lewati';
-    createdAt: string;
+// ==================== PRIORITAS ====================
+
+// VIP (3) > Disabilitas (2) > Lansia (1) > Normal (0)
+function bobotPrioritas(prioritas: string): number {
+  switch (prioritas) {
+    case "VIP":
+      return 3;
+    case "Disabilitas":
+      return 2;
+    case "Lansia":
+      return 1;
+    default:
+      return 0;
+  }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    // 1. Auth Guard: Validasi Sesi Local Storage
-    const authDataStr = localStorage.getItem('auth_user');
-    if (!authDataStr) {
-        alert('Akses Ditolak! Silakan login terlebih dahulu.');
-        window.location.href = 'login.html';
-        return;
-    }
-
-    try {
-        const authData = JSON.parse(authDataStr);
-        const nameEl = document.getElementById('operatorName');
-        const roleEl = document.getElementById('operatorRole');
-        const avatarEl = document.getElementById('operatorAvatar');
-
-        const displayName = authData.firstName || authData.username || 'Operator';
-        const displayRole = authData.role ? `Role: ${authData.role.toUpperCase()}` : 'Operator Loket';
-
-        if (nameEl) nameEl.textContent = displayName;
-        if (roleEl) roleEl.textContent = displayRole;
-        if (avatarEl) avatarEl.textContent = displayName.substring(0, 2).toUpperCase();
-    } catch (e) {
-        console.error('Data sesi korup:', e);
-        window.location.href = 'login.html';
-        return;
-    }
-
-    // Tombol Logout
-    const logoutBtn = document.getElementById('logoutBtn');
-    if (logoutBtn) {
-        logoutBtn.addEventListener('click', () => {
-            localStorage.removeItem('auth_user');
-            window.location.href = 'login.html';
-        });
-    }
-
-    // Inisialisasi Data Default jika belum ada di Local Storage
-    initDefaultData();
-
-    // Render Awal & Jam Sistem
-    renderOperatorPanel();
-    updateClock();
-    setInterval(updateClock, 1000);
-
-    // Sinkronisasi Real-Time lintas tab & polling interval
-    window.addEventListener('storage', () => {
-        renderOperatorPanel();
-    });
-
-    setInterval(() => {
-        renderOperatorPanel();
-    }, 2000);
-});
-
-function updateClock() {
-    const clockEl = document.getElementById('systemClock');
-    if (clockEl) {
-        const now = new Date();
-        clockEl.textContent = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-    }
-}
-
-function initDefaultData() {
-    if (!localStorage.getItem('queueTypes')) {
-        const defaultTypes: QueueType[] = [
-            { code: 'A', name: 'UMUM-1', active: true },
-            { code: 'B', name: 'UMUM-2', active: true },
-            { code: 'C', name: 'UMUM-3', active: true },
-            { code: 'G', name: 'GIGI', active: true },
-            { code: 'F', name: 'FARMASI', active: true },
-            { code: 'P', name: 'PSIKOLOG', active: true }
-        ];
-        localStorage.setItem('queueTypes', JSON.stringify(defaultTypes));
-    }
-
-    if (!localStorage.getItem('tickets')) {
-        const defaultTickets: Ticket[] = [
-            { id: 'A-001', queueCode: 'A', number: 1, priority: 'Normal', status: 'Dipanggil', createdAt: new Date().toISOString() },
-            { id: 'B-001', queueCode: 'B', number: 1, priority: 'VIP', status: 'Menunggu', createdAt: new Date().toISOString() },
-            { id: 'G-003', queueCode: 'G', number: 3, priority: 'Disabilitas', status: 'Dipanggil', createdAt: new Date().toISOString() }
-        ];
-        localStorage.setItem('tickets', JSON.stringify(defaultTickets));
-    }
-}
-
-function getQueueTypes(): QueueType[] {
-    const data = localStorage.getItem('queueTypes');
-    return data ? JSON.parse(data) : [];
-}
-
-function getTickets(): Ticket[] {
-    const data = localStorage.getItem('tickets');
-    return data ? JSON.parse(data) : [];
-}
-
-function saveTickets(tickets: Ticket[]) {
-    localStorage.setItem('tickets', JSON.stringify(tickets));
-}
-
-// Bobot Prioritas: VIP (3) > Disabilitas (2) > Lansia (1) > Normal (0)
-function getPriorityWeight(priority: string): number {
-    switch (priority) {
-        case 'VIP': return 3;
-        case 'Disabilitas': return 2;
-        case 'Lansia': return 1;
-        case 'Normal': default: return 0;
-    }
-}
-
-function showToast(message: string, type: 'success' | 'warning' | 'info' = 'success') {
-    const container = document.getElementById('toastContainer');
-    if (!container) return;
-
-    const toast = document.createElement('div');
-    toast.className = `toast ${type}`;
-    toast.textContent = message;
-    container.appendChild(toast);
-
-    setTimeout(() => {
-        toast.remove();
-    }, 3000);
-}
-
-function renderOperatorPanel() {
-    const container = document.getElementById('queueOperatorContainer');
-    if (!container) return;
-
-    const queueTypes = getQueueTypes().filter(q => q.active);
-    const tickets = getTickets();
-
-    // Update Statistik Atas
-    const totalWaiting = tickets.filter(t => t.status === 'Menunggu' || t.status === 'Lewati').length;
-    const totalActive = tickets.filter(t => t.status === 'Dipanggil').length;
-
-    const totalWaitingEl = document.getElementById('totalWaitingCount');
-    const totalActiveEl = document.getElementById('totalActiveCount');
-    if (totalWaitingEl) totalWaitingEl.textContent = totalWaiting.toString();
-    if (totalActiveEl) totalActiveEl.textContent = totalActive.toString();
-
-    if (queueTypes.length === 0) {
-        container.innerHTML = '<p class="no-ticket-message">Tidak ada jenis antrian aktif saat ini. Atur melalui Dashboard Admin.</p>';
-        return;
-    }
-
-    container.innerHTML = '';
-
-    queueTypes.forEach(qType => {
-        const queueTickets = tickets.filter(t => t.queueCode === qType.code);
-        
-        const currentTicket = queueTickets.find(t => t.status === 'Dipanggil');
-
-        const waitingTickets = queueTickets
-            .filter(t => t.status === 'Menunggu' || t.status === 'Lewati')
-            .sort((a, b) => {
-                const weightDiff = getPriorityWeight(b.priority) - getPriorityWeight(a.priority);
-                if (weightDiff !== 0) return weightDiff;
-                return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
-            });
-
-        const nextTicket = waitingTickets.length > 0 ? waitingTickets[0] : null;
-        const waitingCount = waitingTickets.length;
-
-        const card = document.createElement('div');
-        card.className = 'queue-card';
-        card.innerHTML = `
-            <div class="queue-card-header">
-                <span class="queue-title">${qType.name} (${qType.code})</span>
-                <span class="waiting-badge">${waitingCount} dalam antrian</span>
-            </div>
-            <div class="queue-status-body">
-                <div class="status-box">
-                    <span>Sedang Dipanggil</span>
-                    <div class="status-value ${!currentTicket ? 'empty' : ''}">
-                        ${currentTicket ? currentTicket.id : '-'}
-                    </div>
-                    ${currentTicket ? `<small class="priority-tag">${currentTicket.priority}</small>` : ''}
-                </div>
-                <div class="status-box">
-                    <span>Berikutnya</span>
-                    <div class="status-value ${!nextTicket ? 'empty' : ''}">
-                        ${nextTicket ? nextTicket.id : '-'}
-                    </div>
-                    ${nextTicket ? `<small class="priority-tag">${nextTicket.priority}</small>` : ''}
-                </div>
-            </div>
-            <div class="queue-actions">
-                <button class="btn btn-call" onclick="window.callNextTicket('${qType.code}')">Panggil Berikutnya</button>
-                <button class="btn btn-skip" onclick="window.skipTicket('${qType.code}')" ${!nextTicket ? 'disabled' : ''}>Lewati</button>
-                <button class="btn btn-finish" onclick="window.finishTicket('${qType.code}')" ${!currentTicket ? 'disabled' : ''}>Selesai</button>
-            </div>
-        `;
-        container.appendChild(card);
+// Antrian yang menunggu: prioritas tertinggi dulu, lalu yang lebih dulu diambil
+function urutAntrian(tiket: Tiket[]): Tiket[] {
+  return tiket
+    .filter((t) => t.status === "menunggu")
+    .sort((a, b) => {
+      const selisih = bobotPrioritas(b.prioritas) - bobotPrioritas(a.prioritas);
+      if (selisih !== 0) return selisih;
+      return new Date(a.dibuat).getTime() - new Date(b.dibuat).getTime();
     });
 }
 
-// Global window declaration untuk event onclick pada elemen DOM dinamis
-declare global {
-    interface Window {
-        callNextTicket: (queueCode: string) => void;
-        skipTicket: (queueCode: string) => void;
-        finishTicket: (queueCode: string) => void;
-    }
+// ==================== TOAST ====================
+
+function showToast(pesan: string, jenis: "success" | "warning" | "info" = "success"): void {
+  const toast = el("div", `toast ${jenis}`, pesan);
+  toastContainer.append(toast);
+  window.setTimeout(() => toast.remove(), 3000);
 }
 
-window.callNextTicket = function(queueCode: string) {
-    let tickets = getTickets();
+function updateClock(): void {
+  systemClock.textContent = new Date().toLocaleTimeString("id-ID", {
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  });
+}
 
-    tickets = tickets.map(t => {
-        if (t.queueCode === queueCode && t.status === 'Dipanggil') {
-            return { ...t, status: 'Selesai' as const };
-        }
-        return t;
-    });
+// ==================== AKSI ====================
 
-    const waitingTickets = tickets.filter(t => t.queueCode === queueCode && (t.status === 'Menunggu' || t.status === 'Lewati'))
-        .sort((a, b) => {
-            const weightDiff = getPriorityWeight(b.priority) - getPriorityWeight(a.priority);
-            if (weightDiff !== 0) return weightDiff;
-            return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
-        });
+// Panggil Berikutnya: tiket yang sedang dipanggil -> Selesai, lalu panggil tiket berikutnya
+function panggilBerikutnya(jenis: JenisAntrian): void {
+  if (!pastikanLogin()) return;
 
-    if (waitingTickets.length > 0) {
-        // Gunakan optional chaining (?.) untuk mengatasi error undefined
-        const nextId = waitingTickets[0]?.id;
-        if (nextId) {
-            tickets = tickets.map(t => {
-                if (t.id === nextId) {
-                    return { ...t, status: 'Dipanggil' as const };
-                }
-                return t;
-            });
-            showToast(`Memanggil nomor tiket ${nextId}`, 'success');
-        }
-    } else {
-        showToast(`Tidak ada antrian menunggu untuk kode ${queueCode}`, 'warning');
+  const milik = getTiketList().filter((t) => t.jenisId === jenis.id);
+  const aktif = milik.find((t) => t.status === "dipanggil");
+  const berikutnya = urutAntrian(milik)[0];
+
+  if (aktif) {
+    const selesai = selesaiTiket(aktif.id);
+    if (!selesai.ok) {
+      showToast(selesai.message, "warning");
+      render(true);
+      return;
     }
+  }
 
-    saveTickets(tickets);
-    renderOperatorPanel();
-};
+  if (!berikutnya) {
+    showToast(`Tidak ada antrian menunggu untuk ${jenis.nama}`, "warning");
+    render(true);
+    return;
+  }
 
-window.skipTicket = function(queueCode: string) {
-    let tickets = getTickets();
-    
-    // PERBAIKAN: Gunakan '===' alih-alih '---'
-    const waitingTickets = tickets.filter(t => t.queueCode === queueCode && t.status === 'Menunggu')
-        .sort((a, b) => {
-            const weightDiff = getPriorityWeight(b.priority) - getPriorityWeight(a.priority);
-            if (weightDiff !== 0) return weightDiff;
-            return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
-        });
+  const hasil = panggilTiket(berikutnya.id);
+  if (hasil.ok) {
+    showToast(`Memanggil nomor tiket ${berikutnya.label}`, "success");
+  } else {
+    showToast(hasil.message, "warning");
+  }
+  render(true);
+}
 
-    if (waitingTickets.length > 0) {
-        // Gunakan optional chaining (?.) di sini juga
-        const targetId = waitingTickets[0]?.id;
-        if (targetId) {
-            tickets = tickets.map(t => {
-                if (t.id === targetId) {
-                    return { ...t, status: 'Lewati' as const, createdAt: new Date().toISOString() };
-                }
-                return t;
-            });
-            saveTickets(tickets);
-            showToast(`Tiket ${targetId} dilewati`, 'warning');
-            renderOperatorPanel();
-        }
+// Lewati: tiket berikutnya ditandai Dilewati (keluar dari antrian)
+function lewatiBerikutnya(jenis: JenisAntrian): void {
+  if (!pastikanLogin()) return;
+
+  const milik = getTiketList().filter((t) => t.jenisId === jenis.id);
+  const berikutnya = urutAntrian(milik)[0];
+  if (!berikutnya) return;
+
+  const hasil = lewatiTiket(berikutnya.id);
+  if (hasil.ok) {
+    showToast(`Tiket ${berikutnya.label} dilewati`, "warning");
+  } else {
+    showToast(hasil.message, "warning");
+  }
+  render(true);
+}
+
+// Selesai: tutup tiket yang sedang dipanggil TANPA otomatis memanggil berikutnya
+function selesaikan(jenis: JenisAntrian): void {
+  if (!pastikanLogin()) return;
+
+  const aktif = getTiketList().find((t) => t.jenisId === jenis.id && t.status === "dipanggil");
+  if (!aktif) return;
+
+  const hasil = selesaiTiket(aktif.id);
+  if (hasil.ok) {
+    showToast(`Sesi layanan ${jenis.nama} diselesaikan`, "success");
+  } else {
+    showToast(hasil.message, "warning");
+  }
+  render(true);
+}
+
+// ==================== TAMPILAN ====================
+
+function kotakStatus(judul: string, tiket: Tiket | undefined): HTMLElement {
+  const kotak = el("div", "status-box");
+  kotak.append(
+    el("span", "", judul),
+    el("div", tiket ? "status-value" : "status-value empty", tiket ? tiket.label : "-"),
+  );
+  if (tiket) kotak.append(el("small", "priority-tag", tiket.prioritas));
+  return kotak;
+}
+
+function buatKartu(jenis: JenisAntrian, semuaTiket: Tiket[]): HTMLElement {
+  const milik = semuaTiket.filter((t) => t.jenisId === jenis.id);
+  const dipanggil = milik.find((t) => t.status === "dipanggil");
+  const antrian = urutAntrian(milik);
+  const berikutnya = antrian[0];
+
+  const kartu = el("div", "queue-card");
+
+  const kepala = el("div", "queue-card-header");
+  kepala.append(
+    el("span", "queue-title", `${jenis.nama} (${jenis.kode})`),
+    el("span", "waiting-badge", `${antrian.length} dalam antrian`),
+  );
+
+  const badan = el("div", "queue-status-body");
+  badan.append(kotakStatus("Sedang Dipanggil", dipanggil), kotakStatus("Berikutnya", berikutnya));
+
+  const btnPanggil = el("button", "btn btn-call", "Panggil Berikutnya");
+  btnPanggil.type = "button";
+  btnPanggil.addEventListener("click", () => panggilBerikutnya(jenis));
+
+  const btnLewati = el("button", "btn btn-skip", "Lewati");
+  btnLewati.type = "button";
+  btnLewati.disabled = !berikutnya;
+  btnLewati.addEventListener("click", () => lewatiBerikutnya(jenis));
+
+  const btnSelesai = el("button", "btn btn-finish", "Selesai");
+  btnSelesai.type = "button";
+  btnSelesai.disabled = !dipanggil;
+  btnSelesai.addEventListener("click", () => selesaikan(jenis));
+
+  const aksi = el("div", "queue-actions");
+  aksi.append(btnPanggil, btnLewati, btnSelesai);
+
+  kartu.append(kepala, badan, aksi);
+  return kartu;
+}
+
+// Hanya gambar ulang kalau datanya berubah (supaya klik tidak "hilang" saat polling)
+let tandaTerakhir = "";
+
+function render(paksa = false): void {
+  const jenisAktif = getJenisList().filter((j) => j.aktif);
+  const semuaTiket = getTiketList();
+
+  totalWaitingCount.textContent = semuaTiket.filter((t) => t.status === "menunggu").length.toString();
+  totalActiveCount.textContent = semuaTiket.filter((t) => t.status === "dipanggil").length.toString();
+
+  const tanda = JSON.stringify([jenisAktif, semuaTiket]);
+  if (!paksa && tanda === tandaTerakhir) return;
+  tandaTerakhir = tanda;
+
+  container.replaceChildren();
+
+  if (jenisAktif.length === 0) {
+    container.append(
+      el("p", "no-ticket-message", "Tidak ada jenis antrian aktif saat ini. Atur melalui Dashboard Admin."),
+    );
+    return;
+  }
+
+  for (const jenis of jenisAktif) {
+    container.append(buatKartu(jenis, semuaTiket));
+  }
+}
+
+// ==================== MULAI ====================
+
+function start(session: Session): void {
+  const nama = session.firstName || "Operator";
+  operatorName.textContent = nama;
+  operatorRole.textContent = `Role: ${String(session.role).toUpperCase()}`;
+  operatorAvatar.textContent = nama.substring(0, 2).toUpperCase();
+
+  btnLogout.addEventListener("click", logout);
+
+  render(true);
+  updateClock();
+  window.setInterval(updateClock, 1000);
+
+  // Polling: sesi dicek ulang + tampilan diperbarui
+  window.setInterval(() => {
+    if (!pastikanLogin()) return;
+    render();
+  }, INTERVAL_POLLING);
+
+  // Data/sesi berubah di tab lain
+  window.addEventListener("storage", (event) => {
+    if (event.key === KEYS.session && event.newValue === null) {
+      logout(); // logout di tab lain: ikut keluar
+      return;
     }
-};
+    if (event.key === null || event.key === KEYS.jenisAntrian || event.key === KEYS.tiket) {
+      render();
+    }
+  });
 
-window.finishTicket = function(queueCode: string) {
-    let tickets = getTickets();
-    
-    // Perbaiki typo dari 'lickels' menjadi 'tickets' dan '---' menjadi '==='
-    tickets = tickets.map(t => {
-        if (t.queueCode === queueCode && t.status === 'Dipanggil') {
-            return { ...t, status: 'Selesai' as const };
-        }
-        return t;
-    });
+  // Halaman dipulihkan dari cache (tombol Back setelah logout)
+  window.addEventListener("pageshow", () => {
+    pastikanLogin();
+  });
+}
 
-    saveTickets(tickets);
-    showToast(`Sesi layanan ${queueCode} diselesaikan`, 'success');
-    renderOperatorPanel();
-};
-
-// Tambahkan export kosong di baris paling bawah agar file terbaca sebagai module (mengatasi error declare global)
-export {};
+const session = pastikanLogin();
+if (session !== null) start(session);
